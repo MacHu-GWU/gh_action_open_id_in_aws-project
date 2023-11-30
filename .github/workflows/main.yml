@@ -20,17 +20,18 @@ jobs:
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v4
-      - name: configure aws credentials
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
           # AWS account ID are considered as not-sensitive, but nice to have it as a secret
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/gh_action_open_id_in_aws
           role-session-name: sample_role_session
           aws-region: ${{ env.AWS_REGION }}
-      - name: Test the current aws session
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+      - name: Test the current aws session
         run: |
           pip install boto3
           python test_github_action_open_id_in_aws.py
