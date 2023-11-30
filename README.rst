@@ -4,7 +4,7 @@
     :alt: Documentation Status
 
 .. image:: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/workflows/CI/badge.svg
-    :target: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/actions?query=workflow:CI
+    :target: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/actions?query=workflow:test_github_action_open_id_in_aws
 
 .. .. image:: https://codecov.io/gh/MacHu-GWU/gh_action_open_id_in_aws-project/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/MacHu-GWU/gh_action_open_id_in_aws-project
