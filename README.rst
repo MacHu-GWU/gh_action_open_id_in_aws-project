@@ -112,6 +112,86 @@ If you have more Github repo need to access the same AWS accounts, and you want 
     )
 
 
+GitHub Actions for Multi-AWS Accounts CI/CD IAM Permission Best Practice
+------------------------------------------------------------------------------
+If you have multiple GitHub Repositories using GitHub Actions to deploy applications to multiple environments in multiple AWS accounts, here is the best practice:
+
+1. Supposes that you have three workload AWS Accounts ``dev_aws``, ``test_aws``, ``prod_aws``, and a ``devops_aws`` AWS account to store versioned code artifacts. These accounts could be different AWS accounts, either could be the same AWS account isolated by naming convention.
+2. Supposes that you have one ``admin_repo`` GitHub repo to setup and test the cross AWS account IAM permission, and have multiple project GitHub repo ``project1_repo``, ``project2_repo``, etc ...
+3. Run the following code to setup the GitHub Action OIDC provider in ``devops_aws`` account.
+
+.. code-block:: python
+
+    from gh_action_open_id_in_aws.impl import setup_github_action_open_id_connection_in_aws
+
+    setup_github_action_open_id_connection_in_aws(
+        # this AWS principal should have permission to deploy CloudFormation and IAM
+        aws_profile="aws_profile_for_devops_aws",
+        stack_name="admin-repo-with-hyphen",
+        github_org="your-github-org",
+        github_repo="admin_repo",
+        role_name="admin_repo_role_name",
+    )
+
+4. For each project GitHub repo, run the following code to setup the IAM role in ``devops_aws`` AWS account, only for the given GitHub repo. Of course you can use ``${GitHubOrg}/*`` to give all GitHub repos in the same GitHub org the same permission, but this is not recommended.
+
+.. code-block:: python
+
+    from gh_action_open_id_in_aws.impl import setup_github_action_open_id_connection_in_aws
+
+    setup_github_action_open_id_connection_in_aws(
+        # this AWS principal should have permission to deploy CloudFormation and IAM
+        aws_profile="aws_profile_for_devops_aws",
+        stack_name="project1-repo-with-hyphen",
+        github_org="your-github-org",
+        github_repo="project1_repo",
+        role_name="project1_repo_role_name",
+    )
+
+5. Then refer to the `cross_aws_account_iam_role <https://github.com/MacHu-GWU/cross_aws_account_iam_role-project>`_ Python library to setup the cross AWS account IAM roles for the ``project1_repo_role_name`` in ``devops_aws`` AWS Account.
+
+**Note**:
+
+In general, there are two ways to setup cross AWS account IAM permission in GitHub actions:
+
+1. ONLY setup OIDC provider and IAM role in ``devops_aws`` account, and let the IAM role in ``devops_aws`` account to assume IAM role in ``dev_aws``, ``test_aws``, ``prod_aws`` account. This is the **recommended way**.
+2. Setup OIDC provider and IAM role in ``devops_aws``, ``dev_aws``, ``test_aws``, ``prod_aws`` account. And use `aws-actions/configure-aws-credentials <https://github.com/aws-actions/configure-aws-credentials>`_ GitHub Action to switch between them. This is **NOT recommended**, because it introduce more complexity and more IAM permission to manage in workload AWS accounts, which increases the risk.
+
+.. code-block:: yaml
+
+    name: ...
+    on: ...
+    jobs:
+      job_id:
+        runs-on: ubuntu-latest
+        steps:
+          ..
+          - name: Configure AWS credentials for DEVOPS
+            uses: aws-actions/configure-aws-credentials@v3
+            with:
+              role-to-assume: arn:aws:iam::${{ secrets.DEVOPS_AWS_ACCOUNT_ID }}:role/devops_aws_iam_role
+              role-session-name: sample_role_session
+              aws-region: ${{ env.AWS_REGION }}
+          - name: Configure AWS credentials for DEV
+            uses: aws-actions/configure-aws-credentials@v3
+            with:
+              role-to-assume: arn:aws:iam::${{ secrets.DEV_AWS_ACCOUNT_ID }}:role/dev_aws_iam_role
+              role-session-name: sample_role_session
+              aws-region: ${{ env.AWS_REGION }}
+          - name: Configure AWS credentials for TEST
+            uses: aws-actions/configure-aws-credentials@v3
+            with:
+              role-to-assume: arn:aws:iam::${{ secrets.TEST_AWS_ACCOUNT_ID }}:role/test_aws_iam_role
+              role-session-name: sample_role_session
+              aws-region: ${{ env.AWS_REGION }}
+          - name: Configure AWS credentials for PROD
+            uses: aws-actions/configure-aws-credentials@v3
+            with:
+              role-to-assume: arn:aws:iam::${{ secrets.PROD_AWS_ACCOUNT_ID }}:role/prod_aws_iam_role
+              role-session-name: sample_role_session
+              aws-region: ${{ env.AWS_REGION }}
+
+
 Developer Guide
 ------------------------------------------------------------------------------
 This section is for developers who want to contribute to this project.
