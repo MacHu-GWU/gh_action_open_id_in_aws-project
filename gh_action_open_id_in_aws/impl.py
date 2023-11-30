@@ -47,6 +47,7 @@ def setup_github_action_open_id_connection_in_aws(
     """
     bsm = BotoSesManager(profile_name=aws_profile)
     final_tags = {
+        "tech:cloudformation_stack": f"arn:aws:cloudformation:{bsm.aws_region}:{bsm.aws_account_id}:stack/{stack_name}",
         "tech:human_creator": bsm.sts_client.get_caller_identity()["Arn"],
         "tech:machine_creator": "gh_action_open_id_in_aws",
     }

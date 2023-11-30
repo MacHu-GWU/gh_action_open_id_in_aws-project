@@ -2,7 +2,7 @@
 
 """
 Setup GitHub Action Open ID Connection in AWS for "bmt_app_dev_us_east_1" AWS account.
-It will create the OIDC provider in AWS IAM.
+It will create a new OIDC provider in AWS IAM.
 """
 
 from gh_action_open_id_in_aws.impl import setup_github_action_open_id_connection_in_aws
