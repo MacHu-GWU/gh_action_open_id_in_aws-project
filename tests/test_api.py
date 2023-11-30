@@ -5,6 +5,7 @@ from gh_action_open_id_in_aws import api
 
 def test():
     _ = api
+    _ = api.setup_github_action_open_id_connection_in_aws
 
 
 if __name__ == "__main__":

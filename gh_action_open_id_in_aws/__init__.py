@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 """
-Package Description.
+Setup github action open id in AWS made easy.
 """
 
 from ._version import __version__
 
-__short_description__ = "Package short description."
+__short_description__ = "Setup github action open id in AWS made easy."
 __license__ = "MIT"
 __author__ = "Sanhe Hu"
 __author_email__ = "husanhe@gmail.com"

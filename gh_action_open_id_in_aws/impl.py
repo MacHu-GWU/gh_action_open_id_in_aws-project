@@ -25,6 +25,7 @@ def setup_github_action_open_id_connection_in_aws(
     github_org: str,
     github_repo: str,
     role_name: str,
+    oidc_provider_arn: str = "",
     tags: T.Optional[T.Dict[str, str]] = None,
     skip_prompt: bool = True,
     verbose: bool = True,
@@ -47,7 +48,7 @@ def setup_github_action_open_id_connection_in_aws(
     bsm = BotoSesManager(profile_name=aws_profile)
     final_tags = {
         "tech:human_creator": bsm.sts_client.get_caller_identity()["Arn"],
-        "tech:machine_creator": "setup_github_action_open_id_connection.py",
+        "tech:machine_creator": "gh_action_open_id_in_aws",
     }
     if tags is not None:
         final_tags.update(tags)
@@ -60,6 +61,7 @@ def setup_github_action_open_id_connection_in_aws(
             aws_cf.Parameter(key="GithubOrg", value=github_org),
             aws_cf.Parameter(key="GithubRepoName", value=github_repo),
             aws_cf.Parameter(key="RoleName", value=role_name),
+            aws_cf.Parameter(key="OIDCProviderArn", value=oidc_provider_arn),
         ],
         skip_prompt=skip_prompt,
         include_named_iam=True,

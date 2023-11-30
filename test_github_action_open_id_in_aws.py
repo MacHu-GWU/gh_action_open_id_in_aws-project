@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+"""
+This script tests the AWS permission in GitHub action without showing the
+AWS Account id.
+"""
+
 import boto3
 
 res = boto3.client("sts").get_caller_identity()
