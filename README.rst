@@ -112,6 +112,13 @@ If you have more Github repo need to access the same AWS accounts, and you want 
     )
 
 
+Developer Guide
+------------------------------------------------------------------------------
+This section is for developers who want to contribute to this project.
+
+What under the hood is a CloudFormation template. The `gh_action_open_id_in_aws/cf.py <https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/blob/main/gh_action_open_id_in_aws/cf.py>`_ file contains the AWS CDK source code. The `cdk/cdk_synth.py <https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/blob/main/cdk/cdk_synth.py>`_ script can generate the JSON CloudFormation template using AWS CDK. The developer then can copy the output template to the `gh_action_open_id_in_aws/cft-{year}-{month}-{day}.json <https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/tree/main/gh_action_open_id_in_aws>`_ file and do local testing.
+
+
 .. _install:
 
 Install
