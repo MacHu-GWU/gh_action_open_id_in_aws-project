@@ -3,7 +3,7 @@
     :target: https://gh-action-open-id-in-aws.readthedocs.io/en/latest/
     :alt: Documentation Status
 
-.. image:: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/workflows/CI/badge.svg
+.. image:: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/workflows/test_github_action_open_id_in_aws/badge.svg
     :target: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/actions?query=workflow:test_github_action_open_id_in_aws
 
 .. .. image:: https://codecov.io/gh/MacHu-GWU/gh_action_open_id_in_aws-project/branch/main/graph/badge.svg
