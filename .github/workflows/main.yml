@@ -1,6 +1,6 @@
 # This is an advanced workflow to show you how to use GitHub open id to authenticate with AWS
 # ref: https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
-name: s103_configure_open_id_connect_in_aws
+name: test_github_action_open_id_in_aws
 
 # Controls when the action will run.
 on:
