@@ -15,6 +15,17 @@ x.y.z (Backlog)
 **Miscellaneous**
 
 
+0.1.2 (2023-11-30)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Minor Improvements**
+
+- Add ``tech:cloudformation_stack`` AWS resource tag.
+
+**Bugfixes**
+
+- Removed the unused ``fire`` Python dependency.
+
+
 0.1.1 (2023-11-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**

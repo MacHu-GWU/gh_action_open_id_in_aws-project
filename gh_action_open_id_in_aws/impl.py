@@ -26,6 +26,7 @@ def setup_github_action_open_id_connection_in_aws(
     github_repo: str,
     role_name: str,
     oidc_provider_arn: str = "",
+    oidc_audience: str = "sts.amazonaws.com",
     tags: T.Optional[T.Dict[str, str]] = None,
     skip_prompt: bool = True,
     verbose: bool = True,
@@ -41,6 +42,10 @@ def setup_github_action_open_id_connection_in_aws(
     :param github_repo: the GitHub repository name trusted by the IAM role,
         could be "*"
     :param role_name: the IAM role name to be assumed by the GitHub Actions
+    :param oidc_provider_arn: the OIDC provider arn, if not provided, it will
+        not create a new OIDC provider, if provided, reuse the existing one.
+    :param oidc_audience: mostly, it is "sts.amazonaws.com".
+    :param tags: custom AWS resources tags
     :param skip_prompt: default False; if False, you have to enter "Yes"
         in prompt to do deployment; if True, then execute the deployment directly.
     :param verbose: whether you want to log information to console
@@ -49,7 +54,7 @@ def setup_github_action_open_id_connection_in_aws(
     final_tags = {
         "tech:cloudformation_stack": f"arn:aws:cloudformation:{bsm.aws_region}:{bsm.aws_account_id}:stack/{stack_name}",
         "tech:human_creator": bsm.sts_client.get_caller_identity()["Arn"],
-        "tech:machine_creator": "gh_action_open_id_in_aws",
+        "tech:machine_creator": "gh_action_open_id_in_aws Python library",
     }
     if tags is not None:
         final_tags.update(tags)
@@ -63,6 +68,7 @@ def setup_github_action_open_id_connection_in_aws(
             aws_cf.Parameter(key="GithubRepoName", value=github_repo),
             aws_cf.Parameter(key="RoleName", value=role_name),
             aws_cf.Parameter(key="OIDCProviderArn", value=oidc_provider_arn),
+            aws_cf.Parameter(key="OIDCAudience", value=oidc_audience),
         ],
         skip_prompt=skip_prompt,
         include_named_iam=True,
