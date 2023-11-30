@@ -50,6 +50,7 @@
 
 Welcome to ``gh_action_open_id_in_aws`` Documentation
 ==============================================================================
+.. image:: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/assets/6800411/b490626c-ef2f-4b86-850b-575dbe18c57e
 
 
 Overview
