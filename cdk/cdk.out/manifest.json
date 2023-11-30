@@ -1,0 +1,107 @@
+{
+  "version": "35.0.0",
+  "artifacts": {
+    "gh-action-open-id-in-aws.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "gh-action-open-id-in-aws.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "gh-action-open-id-in-aws": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "gh-action-open-id-in-aws.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/2c3b94af637c593f0c2caa74cb79431cbfb1dda12375ec23dfd356b228dbcda9.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "gh-action-open-id-in-aws.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "gh-action-open-id-in-aws.assets"
+      ],
+      "metadata": {
+        "/gh-action-open-id-in-aws/GithubOrg": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GithubOrg"
+          }
+        ],
+        "/gh-action-open-id-in-aws/GithubRepoName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GithubRepoName"
+          }
+        ],
+        "/gh-action-open-id-in-aws/OIDCProviderArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OIDCProviderArn"
+          }
+        ],
+        "/gh-action-open-id-in-aws/OIDCAudience": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OIDCAudience"
+          }
+        ],
+        "/gh-action-open-id-in-aws/RoleName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RoleName"
+          }
+        ],
+        "/gh-action-open-id-in-aws/CreateOIDCProvider": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CreateOIDCProvider"
+          }
+        ],
+        "/gh-action-open-id-in-aws/GitHubOIDCProvider": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GitHubOIDCProvider"
+          }
+        ],
+        "/gh-action-open-id-in-aws/GitHubActionRole": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "GitHubActionRole"
+          }
+        ],
+        "/gh-action-open-id-in-aws/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/gh-action-open-id-in-aws/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "gh-action-open-id-in-aws"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

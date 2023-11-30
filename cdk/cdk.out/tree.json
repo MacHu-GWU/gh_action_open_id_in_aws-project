@@ -1,0 +1,175 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "gh-action-open-id-in-aws": {
+        "id": "gh-action-open-id-in-aws",
+        "path": "gh-action-open-id-in-aws",
+        "children": {
+          "GithubOrg": {
+            "id": "GithubOrg",
+            "path": "gh-action-open-id-in-aws/GithubOrg",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.111.0"
+            }
+          },
+          "GithubRepoName": {
+            "id": "GithubRepoName",
+            "path": "gh-action-open-id-in-aws/GithubRepoName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.111.0"
+            }
+          },
+          "OIDCProviderArn": {
+            "id": "OIDCProviderArn",
+            "path": "gh-action-open-id-in-aws/OIDCProviderArn",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.111.0"
+            }
+          },
+          "OIDCAudience": {
+            "id": "OIDCAudience",
+            "path": "gh-action-open-id-in-aws/OIDCAudience",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.111.0"
+            }
+          },
+          "RoleName": {
+            "id": "RoleName",
+            "path": "gh-action-open-id-in-aws/RoleName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.111.0"
+            }
+          },
+          "CreateOIDCProvider": {
+            "id": "CreateOIDCProvider",
+            "path": "gh-action-open-id-in-aws/CreateOIDCProvider",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnCondition",
+              "version": "2.111.0"
+            }
+          },
+          "GitHubOIDCProvider": {
+            "id": "GitHubOIDCProvider",
+            "path": "gh-action-open-id-in-aws/GitHubOIDCProvider",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::IAM::OIDCProvider",
+              "aws:cdk:cloudformation:props": {
+                "clientIdList": [
+                  "sts.amazonaws.com"
+                ],
+                "thumbprintList": [
+                  "ffffffffffffffffffffffffffffffffffffffff"
+                ],
+                "url": "https://token.actions.githubusercontent.com"
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.CfnOIDCProvider",
+              "version": "2.111.0"
+            }
+          },
+          "GitHubActionRole": {
+            "id": "GitHubActionRole",
+            "path": "gh-action-open-id-in-aws/GitHubActionRole",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+              "aws:cdk:cloudformation:props": {
+                "assumeRolePolicyDocument": {
+                  "Version": "2008-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Federated": {
+                          "Fn::If": [
+                            "CreateOIDCProvider",
+                            {
+                              "Ref": "GitHubOIDCProvider"
+                            },
+                            {
+                              "Ref": "OIDCProviderArn"
+                            }
+                          ]
+                        }
+                      },
+                      "Action": "sts:AssumeRoleWithWebIdentity",
+                      "Condition": {
+                        "StringEquals": {
+                          "token.actions.githubusercontent.com:aud": {
+                            "Ref": "OIDCAudience"
+                          }
+                        },
+                        "StringLike": {
+                          "token.actions.githubusercontent.com:sub": {
+                            "Fn::Sub": [
+                              "repo:${github_org}/${github_repo_name}:*",
+                              {
+                                "github_org": {
+                                  "Ref": "GithubOrg"
+                                },
+                                "github_repo_name": {
+                                  "Ref": "GithubRepoName"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "roleName": {
+                  "Ref": "RoleName"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+              "version": "2.111.0"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "gh-action-open-id-in-aws/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.111.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "gh-action-open-id-in-aws/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.111.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.111.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.3.0"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.111.0"
+    }
+  }
+}
