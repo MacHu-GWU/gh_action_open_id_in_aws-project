@@ -8,6 +8,7 @@ It will create a new OIDC provider in AWS IAM.
 from gh_action_open_id_in_aws.impl import setup_github_action_open_id_connection_in_aws
 
 for aws_profile in [
+    "bmt_app_devops_us_east_1",
     "bmt_app_dev_us_east_1",
     "bmt_app_test_us_east_1",
     "bmt_app_prod_us_east_1",
