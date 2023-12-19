@@ -11,7 +11,7 @@
         "OIDCProviderArn": {
             "Type": "String",
             "Default": "",
-            "Description": "Arn for the GitHub OIDC Provider. (optional)"
+            "Description": "Arn for the GitHub OIDC Provider. (optional). If this is an empty string, the stack will create a new OIDC provider. And the GitHub IAM role will trust the created OIDC provider. If this is an existing OIDC Provider Arn, then the stack will NOT create a new OIDC provider and the GitHub IAM role will trust the existing OIDC provider."
         },
         "OIDCAudience": {
             "Type": "String",

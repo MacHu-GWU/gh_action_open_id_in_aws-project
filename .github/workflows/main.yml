@@ -1,4 +1,4 @@
-# The ``setup_github_action_open_id_connection_in_aws.py`` script setup
+# The ``example_1_setup_github_action_open_id_connection_in_aws.py`` script setup
 # GitHub action open id connect for three AWS accounts,
 # This GitHub action workflow tests the GitHub action IAM permission
 # on those three accounts

@@ -71,7 +71,9 @@ Reference:
 
 How to Use
 ------------------------------------------------------------------------------
-To setup GitHub action open id connection in AWS the first time, you can do the following. This code snippet creates the necessary resources using AWS CloudFormation:
+**Setup GitHub OIDC Connect in an AWS account the first time**
+
+To setup GitHub action open id connection in AWS the first time, you can do the following. This code snippet creates an GitHub OIDC Identity Provider and an IAM role to let the Identity Provider to assume using AWS CloudFormation:
 
 .. code-block:: python
 
@@ -85,7 +87,23 @@ To setup GitHub action open id connection in AWS the first time, you can do the 
         role_name="the_iam_role_name_to_be_assumed_by_github_actions",
     )
 
-If you have more Github repo need to access the same AWS accounts, and you want to give them different permission, you can do this. This code snippet reuse the OIDC Provider you created before and create a different IAM role, and configure IAM policy permission for the new GitHub repo:
+Note that the created IAM role won't have any permission, you need to configure it yourself. Usually, GitHub action is used for CI/CD, you may need the following permissions to perform common CI/CD tasks.:
+
+1. Manage (Create / Update / Delete) IAM Role / Policy
+2. Manage (Create / Update / Delete) AWS CloudFormation stack.
+3. Manage (Create / Update / Delete) AWS S3 Bucket to read / write deployment artifacts.
+4. Manage (Create / Update / Delete) AWS Parameter Store to read and write parameters.
+5. Manage (Create / Update / Delete) AWS ECR to push and pull container images and share it to workload AWS accounts.
+6. Manage (Create / Update / Delete) AWS EC2 AMI and share it to workload AWS accounts.
+7. Manage (Create / Update / Delete) AWS SNS Topic to send notifications.
+
+Pro Tips:
+
+    The GitHub IAM Role permission should define a common name prefix to identify devops resources from other resources, avoid using ``"Resource": "*"``.
+
+**Setup AWS Permission for Multiple GitHub Repositories**
+
+If you have more Github repo need to access the same AWS accounts, and you want to give them different permission, you can do this. This code snippet reuse the OIDC Provider you created before (make sure you did the previous example before) and create a different IAM role, and configure IAM policy permission for the new GitHub repo:
 
 .. code-block:: python
 
@@ -118,7 +136,7 @@ If you have multiple GitHub Repositories using GitHub Actions to deploy applicat
 
 1. Supposes that you have three workload AWS Accounts ``dev_aws``, ``test_aws``, ``prod_aws``, and a ``devops_aws`` AWS account to store versioned code artifacts. These accounts could be different AWS accounts, either could be the same AWS account isolated by naming convention.
 2. Supposes that you have one ``admin_repo`` GitHub repo to setup and test the cross AWS account IAM permission, and have multiple project GitHub repo ``project1_repo``, ``project2_repo``, etc ...
-3. Run the following code to setup the GitHub Action OIDC provider in ``devops_aws`` account.
+3. Run the following code to setup the GitHub Action OIDC provider in ``devops_aws`` account. It will create an IAM role without any permission. Please keep it as it is, we are not going to use it for any project.
 
 .. code-block:: python
 
@@ -133,7 +151,7 @@ If you have multiple GitHub Repositories using GitHub Actions to deploy applicat
         role_name="admin_repo_role_name",
     )
 
-4. For each project GitHub repo, run the following code to setup the IAM role in ``devops_aws`` AWS account, only for the given GitHub repo. Of course you can use ``${GitHubOrg}/*`` to give all GitHub repos in the same GitHub org the same permission, but this is not recommended.
+4. For each project GitHub repo, run the following code to setup the IAM role in ``devops_aws`` AWS account, only for the given GitHub repo. Of course you can use ``${GitHubOrg}/*`` to give all GitHub repos in the same GitHub org the same permission, but this is not recommended. And then, you should configure the IAM role permission manually for the project GitHub repo.
 
 .. code-block:: python
 
@@ -157,10 +175,16 @@ In general, there are two ways to setup cross AWS account IAM permission in GitH
 1. ONLY setup OIDC provider and IAM role in ``devops_aws`` account, and let the IAM role in ``devops_aws`` account to assume IAM role in ``dev_aws``, ``test_aws``, ``prod_aws`` account. This is the **recommended way**.
 2. Setup OIDC provider and IAM role in ``devops_aws``, ``dev_aws``, ``test_aws``, ``prod_aws`` account. And use `aws-actions/configure-aws-credentials <https://github.com/aws-actions/configure-aws-credentials>`_ GitHub Action to switch between them. This is **NOT recommended**, because it introduce more complexity and more IAM permission to manage in workload AWS accounts, which increases the risk.
 
+**Test your Setup**
+
+Below is a sample GitHub Actions workflow file to test your setup. You have to create four GitHub secrets ``DEVOPS_AWS_ACCOUNT_ID``, ``DEV_AWS_ACCOUNT_ID``, ``TEST_AWS_ACCOUNT_ID``, ``PROD_AWS_ACCOUNT_ID``:
+
 .. code-block:: yaml
 
     name: ...
     on: ...
+    env:
+      AWS_REGION: us-east-1
     jobs:
       job_id:
         runs-on: ubuntu-latest

@@ -15,6 +15,14 @@ x.y.z (Backlog)
 **Miscellaneous**
 
 
+0.1.3 (2023-12-19)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Miscellaneous**
+
+- fix inaccurate doc string of the ``oidc_provider_arn`` parameter in the ``setup_github_action_open_id_connection_in_aws`` function.
+- improve document.
+
+
 0.1.2 (2023-11-30)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Minor Improvements**

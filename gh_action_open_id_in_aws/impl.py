@@ -43,7 +43,9 @@ def setup_github_action_open_id_connection_in_aws(
         could be "*"
     :param role_name: the IAM role name to be assumed by the GitHub Actions
     :param oidc_provider_arn: the OIDC provider arn, if not provided, it will
-        not create a new OIDC provider, if provided, reuse the existing one.
+        create a new OIDC provider. if provided, reuse the existing one.
+        leave it empty if it is the first time to set up the OIDC provider in
+        the given AWS account.
     :param oidc_audience: mostly, it is "sts.amazonaws.com".
     :param tags: custom AWS resources tags
     :param skip_prompt: default False; if False, you have to enter "Yes"

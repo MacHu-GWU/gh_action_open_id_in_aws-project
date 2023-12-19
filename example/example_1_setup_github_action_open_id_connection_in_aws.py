@@ -1,8 +1,15 @@
 # -*- coding: utf-8 -*-
 
+
 """
-Setup GitHub Action Open ID Connection in AWS for "bmt_app_dev_us_east_1" AWS account.
-It will create a new OIDC provider in AWS IAM.
+Setup GitHub Action Open ID Connection in AWS for the given AWS account.
+It will create a new OIDC provider and an IAM role for GitHub action to assume
+in AWS IAM. Note that the IAM role won't have any permission.
+
+This is useful when it is the first time you set up GitHub Action Open ID Connection
+for the given AWS account. Since you may have multiple GitHub repositories,
+you should intentionally leave this IAM role without any permission. Then, you can
+reuse the OIDC provider to create more roles for each GitHub repository.
 """
 
 from gh_action_open_id_in_aws.impl import setup_github_action_open_id_connection_in_aws
