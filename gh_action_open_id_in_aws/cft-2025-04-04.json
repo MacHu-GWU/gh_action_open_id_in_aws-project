@@ -1,26 +1,23 @@
 {
     "Parameters": {
-        "GithubOrg": {
-            "Type": "String",
-            "Description": "Name of GitHub organization/user (case sensitive)"
-        },
-        "GithubRepoName": {
-            "Type": "String",
-            "Description": "Name of GitHub repository (case sensitive)"
+        "GithubRepoPatterns": {
+            "Type": "CommaDelimitedList",
+            "Description": "List of GitHub repository patterns in format 'repo:${GithubOrg}/${GithubRepoName}:*'"
         },
         "OIDCProviderArn": {
             "Type": "String",
-            "Default": "",
-            "Description": "Arn for the GitHub OIDC Provider. (optional). If this is an empty string, the stack will create a new OIDC provider. And the GitHub IAM role will trust the created OIDC provider. If this is an existing OIDC Provider Arn, then the stack will NOT create a new OIDC provider and the GitHub IAM role will trust the existing OIDC provider."
+            "Description": "Arn for the GitHub OIDC Provider. (optional). If this is an empty string, the stack will create a new OIDC provider. And the GitHub IAM role will trust the created OIDC provider. If this is an existing OIDC Provider Arn, then the stack will NOT create a new OIDC provider and the GitHub IAM role will trust the existing OIDC provider.",
+            "Default": ""
         },
         "OIDCAudience": {
             "Type": "String",
-            "Default": "sts.amazonaws.com",
-            "Description": "Audience supplied to configure-aws-credentials"
+            "Description": "Audience supplied to configure-aws-credentials",
+            "Default": "sts.amazonaws.com"
         },
         "RoleName": {
             "Type": "String",
-            "Description": "Name of the IAM role to be assumed by GitHub Actions"
+            "Description": "Name of the IAM role to be assumed by GitHub Actions",
+            "Default": ""
         }
     },
     "Conditions": {
@@ -30,6 +27,18 @@
                     "Ref": "OIDCProviderArn"
                 },
                 ""
+            ]
+        },
+        "CreateActionRole": {
+            "Fn::Not": [
+                {
+                    "Fn::Equals": [
+                        {
+                            "Ref": "RoleName"
+                        },
+                        ""
+                    ]
+                }
             ]
         }
     },
@@ -77,17 +86,7 @@
                                 },
                                 "StringLike": {
                                     "token.actions.githubusercontent.com:sub": {
-                                        "Fn::Sub": [
-                                            "repo:${github_org}/${github_repo_name}:*",
-                                            {
-                                                "github_org": {
-                                                    "Ref": "GithubOrg"
-                                                },
-                                                "github_repo_name": {
-                                                    "Ref": "GithubRepoName"
-                                                }
-                                            }
-                                        ]
+                                        "Ref": "GithubRepoPatterns"
                                     }
                                 }
                             }
@@ -97,7 +96,8 @@
                 "RoleName": {
                     "Ref": "RoleName"
                 }
-            }
+            },
+            "Condition": "CreateActionRole"
         }
     }
 }
