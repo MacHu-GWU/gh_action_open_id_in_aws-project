@@ -25,4 +25,4 @@ dir_unit_test = dir_project_root / "tests"
 # ------------------------------------------------------------------------------
 # App Related
 # ------------------------------------------------------------------------------
-path_cft = dir_python_lib.joinpath("cft-2023-11-26.json")
+path_cft = dir_python_lib.joinpath("cft-2025-04-04.json")

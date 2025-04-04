@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Setup github action open id in AWS made easy.
+Setup GitHub action Open ID connect for AWS made easy.
 """
 
 from ._version import __version__

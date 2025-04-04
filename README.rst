@@ -1,12 +1,11 @@
-
-.. .. image:: https://readthedocs.org/projects/gh-action-open-id-in-aws/badge/?version=latest
+.. image:: https://readthedocs.org/projects/gh-action-open-id-in-aws/badge/?version=latest
     :target: https://gh-action-open-id-in-aws.readthedocs.io/en/latest/
     :alt: Documentation Status
 
-.. image:: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/workflows/test_github_action_open_id_in_aws/badge.svg
-    :target: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/actions?query=workflow:test_github_action_open_id_in_aws
+.. image:: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/actions/workflows/main.yml/badge.svg
+    :target: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/actions?query=workflow:CI
 
-.. .. image:: https://codecov.io/gh/MacHu-GWU/gh_action_open_id_in_aws-project/branch/main/graph/badge.svg
+.. image:: https://codecov.io/gh/MacHu-GWU/gh_action_open_id_in_aws-project/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/MacHu-GWU/gh_action_open_id_in_aws-project
 
 .. image:: https://img.shields.io/pypi/v/gh-action-open-id-in-aws.svg
@@ -18,18 +17,15 @@
 .. image:: https://img.shields.io/pypi/pyversions/gh-action-open-id-in-aws.svg
     :target: https://pypi.python.org/pypi/gh-action-open-id-in-aws
 
-.. image:: https://img.shields.io/badge/Release_History!--None.svg?style=social
+.. image:: https://img.shields.io/badge/✍️_Release_History!--None.svg?style=social&logo=github
     :target: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/blob/main/release-history.rst
 
-.. image:: https://img.shields.io/badge/STAR_Me_on_GitHub!--None.svg?style=social
+.. image:: https://img.shields.io/badge/⭐_Star_me_on_GitHub!--None.svg?style=social&logo=github
     :target: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project
 
 ------
 
-.. .. image:: https://img.shields.io/badge/Link-Document-blue.svg
-    :target: https://gh-action-open-id-in-aws.readthedocs.io/en/latest/
-
-.. .. image:: https://img.shields.io/badge/Link-API-blue.svg
+.. image:: https://img.shields.io/badge/Link-API-blue.svg
     :target: https://gh-action-open-id-in-aws.readthedocs.io/en/latest/py-modindex.html
 
 .. image:: https://img.shields.io/badge/Link-Install-blue.svg
@@ -50,7 +46,8 @@
 
 Welcome to ``gh_action_open_id_in_aws`` Documentation
 ==============================================================================
-.. image:: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/assets/6800411/b490626c-ef2f-4b86-850b-575dbe18c57e
+.. image:: https://gh-action-open-id-in-aws.readthedocs.io/en/latest/_static/gh_action_open_id_in_aws-logo.png
+    :target: https://gh-action-open-id-in-aws.readthedocs.io/en/latest/
 
 
 Overview
