@@ -34,9 +34,9 @@ def setup_github_action_open_id_connection_in_aws(
         sufficient permissions to create IAM roles and OIDC providers.
     :param stack_name: Name for the CloudFormation stack that will be created.
     :param github_repo_patterns: List of GitHub repository patterns to allow access.
-        Each pattern should be in the format: "repo:${github_org}/${github_repo_name}:*"
-        or "repo:${github_org}/${github_repo_name_prefix}*:*"
-        Example: ["repo:MyOrg/my-repo:*", "repo:MyOrg/prefix*:*", "repo:MyOrg/another-repo:ref:refs/heads/main"]
+        Each pattern should be in the format: ``repo:${github_org}/${github_repo_name}:*``
+        or ``repo:${github_org}/${github_repo_name_prefix}*:*``
+        Example: ``["repo:MyOrg/my-repo:*", "repo:MyOrg/prefix*:*", "repo:MyOrg/another-repo:ref:refs/heads/main"]``
     :param role_name: Name of the IAM role to be created and assumed by GitHub Actions.
         If empty, the stack will only create the OIDC provider without an IAM role.
     :param oidc_provider_arn: ARN of an existing GitHub OIDC provider in your AWS account.
