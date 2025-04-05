@@ -10,6 +10,8 @@ This approach lets you reuse the same OIDC provider across multiple IAM roles fo
 different GitHub repositories, improving security and maintainability.
 """
 
+from boto_session_manager import BotoSesManager
+from aws_cloudformation.api import remove_stack
 from gh_action_open_id_in_aws.impl import setup_github_action_open_id_connection_in_aws
 
 # List your local AWS CLI profiles here, with each profile corresponding to one AWS account
@@ -17,21 +19,38 @@ from gh_action_open_id_in_aws.impl import setup_github_action_open_id_connection
 aws_profile_list = [
     "bmt_app_devops_us_east_1",
     "bmt_app_dev_us_east_1",
-    # "bmt_app_test_us_east_1",
-    # "bmt_app_prod_us_east_1",
+    "bmt_app_test_us_east_1",
+    "bmt_app_prod_us_east_1",
 ]
 stack_name = "github-action-oidc-provider"
 
-for aws_profile in aws_profile_list:
-    deploy_stack_response = setup_github_action_open_id_connection_in_aws(
-        aws_profile=aws_profile,
-        stack_name=stack_name,
-        github_repo_patterns=[],  # We only create OIDC provider, this value is only used for IAM role, so we can set it to empty list.
-        role_name="",  # We only create OIDC provider, so no need to create IAM role for GitHub action to assume in AWS IAM.
-        tags={
-            "tech:project_name": "gh_action_open_id_in_aws",
-            "tech:description": "The GitHub Action OIDC provider created in this stack will be reused in many IAM roles. So do not delete it.",
-        },
-        skip_prompt=True,
-        verbose=True,
-    )
+
+def setup():
+    for aws_profile in aws_profile_list:
+        deploy_stack_response = setup_github_action_open_id_connection_in_aws(
+            aws_profile=aws_profile,
+            stack_name=stack_name,
+            github_repo_patterns=[],  # We only create OIDC provider, this value is only used for IAM role, so we can set it to empty list.
+            role_name="",  # We only create OIDC provider, so no need to create IAM role for GitHub action to assume in AWS IAM.
+            tags={
+                "tech:project_name": "gh_action_open_id_in_aws",
+                "tech:description": "The GitHub Action OIDC provider created in this stack will be reused in many IAM roles. So do not delete it.",
+            },
+            skip_prompt=True,
+            verbose=True,
+        )
+
+
+def teardown():
+    for aws_profile in aws_profile_list:
+        bsm = BotoSesManager(profile_name=aws_profile)
+        remove_stack(
+            bsm=bsm,
+            stack_name=stack_name,
+            skip_prompt=True,
+            verbose=True,
+        )
+
+
+setup()
+# teardown()
