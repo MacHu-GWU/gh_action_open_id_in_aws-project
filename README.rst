@@ -5,7 +5,7 @@
 .. image:: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/actions/workflows/main.yml/badge.svg
     :target: https://github.com/MacHu-GWU/gh_action_open_id_in_aws-project/actions?query=workflow:CI
 
-.. image:: https://codecov.io/gh/MacHu-GWU/gh_action_open_id_in_aws-project/branch/main/graph/badge.svg
+.. .. image:: https://codecov.io/gh/MacHu-GWU/gh_action_open_id_in_aws-project/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/MacHu-GWU/gh_action_open_id_in_aws-project
 
 .. image:: https://img.shields.io/pypi/v/gh-action-open-id-in-aws.svg
@@ -49,9 +49,6 @@ Welcome to ``gh_action_open_id_in_aws`` Documentation
 .. image:: https://gh-action-open-id-in-aws.readthedocs.io/en/latest/_static/gh_action_open_id_in_aws-logo.png
     :target: https://gh-action-open-id-in-aws.readthedocs.io/en/latest/
 
-
-Overview
-------------------------------------------------------------------------------
 To use GitHub Actions to deploy applications to AWS, we have to setup the permission properly.
 
 The old school method is to use `Secret Environment Variable <https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions>`_ to store the `AWS IAM User <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html>`_ credentials. You can store `access key abd secret key <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html>`_ to the `AWS_ACCESS_KEY_ID 和 AWS_SECRET_ACCESS_KEY <https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html>`_ environment variables. This is also the solution used by CircleCI.
@@ -64,153 +61,6 @@ Reference:
 
 - `Configuring OpenID Connect in Amazon Web Services <https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services>`_: GitHub official doc.
 - `Sample IAM OIDC CloudFormation Template <https://github.com/aws-actions/configure-aws-credentials#sample-iam-oidc-cloudformation-template>`_: AWS maintained github action.
-
-
-How to Use
-------------------------------------------------------------------------------
-**Setup GitHub OIDC Connect in an AWS account the first time**
-
-To setup GitHub action open id connection in AWS the first time, you can do the following. This code snippet creates an GitHub OIDC Identity Provider and an IAM role to let the Identity Provider to assume using AWS CloudFormation:
-
-.. code-block:: python
-
-    from gh_action_open_id_in_aws.impl import setup_github_action_open_id_connection_in_aws
-
-    setup_github_action_open_id_connection_in_aws(
-        aws_profile="your_aws_profile_here",
-        stack_name="cloudformation-stack-name-here",
-        github_org="your-github-organization-name",
-        github_repo="your_github_repo_name",
-        role_name="the_iam_role_name_to_be_assumed_by_github_actions",
-    )
-
-Note that the created IAM role won't have any permission, you need to configure it yourself. Usually, GitHub action is used for CI/CD, you may need the following permissions to perform common CI/CD tasks.:
-
-1. Manage (Create / Update / Delete) IAM Role / Policy
-2. Manage (Create / Update / Delete) AWS CloudFormation stack.
-3. Manage (Create / Update / Delete) AWS S3 Bucket to read / write deployment artifacts.
-4. Manage (Create / Update / Delete) AWS Parameter Store to read and write parameters.
-5. Manage (Create / Update / Delete) AWS ECR to push and pull container images and share it to workload AWS accounts.
-6. Manage (Create / Update / Delete) AWS EC2 AMI and share it to workload AWS accounts.
-7. Manage (Create / Update / Delete) AWS SNS Topic to send notifications.
-
-Pro Tips:
-
-    The GitHub IAM Role permission should define a common name prefix to identify devops resources from other resources, avoid using ``"Resource": "*"``.
-
-**Setup AWS Permission for Multiple GitHub Repositories**
-
-If you have more Github repo need to access the same AWS accounts, and you want to give them different permission, you can do this. This code snippet reuse the OIDC Provider you created before (make sure you did the previous example before) and create a different IAM role, and configure IAM policy permission for the new GitHub repo:
-
-.. code-block:: python
-
-    from boto_session_manager import BotoSesManager
-    from gh_action_open_id_in_aws.impl import setup_github_action_open_id_connection_in_aws
-
-    aws_profile = "your_aws_profile_here"
-    bsm = BotoSesManager(profile_name=aws_profile)
-    role_name = "the_new_iam_role_name_to_be_assumed_by_github_actions"
-
-    setup_github_action_open_id_connection_in_aws(
-        aws_profile=aws_profile,
-        stack_name="cloudformation-stack-name-here",
-        github_org="your-github-organization-name",
-        github_repo="another_github_repo_name",
-        role_name=role_name,
-        oidc_provider_arn=f"arn:aws:iam::{bsm.aws_account_id}:oidc-provider/token.actions.githubusercontent.com",
-    )
-
-    # let's say you want to give the new GitHub repo admin permission
-    bsm.iam_client.attach_role_policy(
-        RoleName=role_name,
-        PolicyArn="arn:aws:iam::aws:policy/AdministratorAccess",
-    )
-
-
-GitHub Actions for Multi-AWS Accounts CI/CD IAM Permission Best Practice
-------------------------------------------------------------------------------
-If you have multiple GitHub Repositories using GitHub Actions to deploy applications to multiple environments in multiple AWS accounts, here is the best practice:
-
-1. Supposes that you have three workload AWS Accounts ``dev_aws``, ``test_aws``, ``prod_aws``, and a ``devops_aws`` AWS account to store versioned code artifacts. These accounts could be different AWS accounts, either could be the same AWS account isolated by naming convention.
-2. Supposes that you have one ``admin_repo`` GitHub repo to setup and test the cross AWS account IAM permission, and have multiple project GitHub repo ``project1_repo``, ``project2_repo``, etc ...
-3. Run the following code to setup the GitHub Action OIDC provider in ``devops_aws`` account. It will create an IAM role without any permission. Please keep it as it is, we are not going to use it for any project.
-
-.. code-block:: python
-
-    from gh_action_open_id_in_aws.impl import setup_github_action_open_id_connection_in_aws
-
-    setup_github_action_open_id_connection_in_aws(
-        # this AWS principal should have permission to deploy CloudFormation and IAM
-        aws_profile="aws_profile_for_devops_aws",
-        stack_name="admin-repo-with-hyphen",
-        github_org="your-github-org",
-        github_repo="admin_repo",
-        role_name="admin_repo_role_name",
-    )
-
-4. For each project GitHub repo, run the following code to setup the IAM role in ``devops_aws`` AWS account, only for the given GitHub repo. Of course you can use ``${GitHubOrg}/*`` to give all GitHub repos in the same GitHub org the same permission, but this is not recommended. And then, you should configure the IAM role permission manually for the project GitHub repo.
-
-.. code-block:: python
-
-    from gh_action_open_id_in_aws.impl import setup_github_action_open_id_connection_in_aws
-
-    setup_github_action_open_id_connection_in_aws(
-        # this AWS principal should have permission to deploy CloudFormation and IAM
-        aws_profile="aws_profile_for_devops_aws",
-        stack_name="project1-repo-with-hyphen",
-        github_org="your-github-org",
-        github_repo="project1_repo",
-        role_name="project1_repo_role_name",
-    )
-
-5. Then refer to the `cross_aws_account_iam_role <https://github.com/MacHu-GWU/cross_aws_account_iam_role-project>`_ Python library to setup the cross AWS account IAM roles for the ``project1_repo_role_name`` in ``devops_aws`` AWS Account.
-
-**Note**:
-
-In general, there are two ways to setup cross AWS account IAM permission in GitHub actions:
-
-1. ONLY setup OIDC provider and IAM role in ``devops_aws`` account, and let the IAM role in ``devops_aws`` account to assume IAM role in ``dev_aws``, ``test_aws``, ``prod_aws`` account. This is the **recommended way**.
-2. Setup OIDC provider and IAM role in ``devops_aws``, ``dev_aws``, ``test_aws``, ``prod_aws`` account. And use `aws-actions/configure-aws-credentials <https://github.com/aws-actions/configure-aws-credentials>`_ GitHub Action to switch between them. This is **NOT recommended**, because it introduce more complexity and more IAM permission to manage in workload AWS accounts, which increases the risk.
-
-**Test your Setup**
-
-Below is a sample GitHub Actions workflow file to test your setup. You have to create four GitHub secrets ``DEVOPS_AWS_ACCOUNT_ID``, ``DEV_AWS_ACCOUNT_ID``, ``TEST_AWS_ACCOUNT_ID``, ``PROD_AWS_ACCOUNT_ID``:
-
-.. code-block:: yaml
-
-    name: ...
-    on: ...
-    env:
-      AWS_REGION: us-east-1
-    jobs:
-      job_id:
-        runs-on: ubuntu-latest
-        steps:
-          ..
-          - name: Configure AWS credentials for DEVOPS
-            uses: aws-actions/configure-aws-credentials@v3
-            with:
-              role-to-assume: arn:aws:iam::${{ secrets.DEVOPS_AWS_ACCOUNT_ID }}:role/devops_aws_iam_role
-              role-session-name: sample_role_session
-              aws-region: ${{ env.AWS_REGION }}
-          - name: Configure AWS credentials for DEV
-            uses: aws-actions/configure-aws-credentials@v3
-            with:
-              role-to-assume: arn:aws:iam::${{ secrets.DEV_AWS_ACCOUNT_ID }}:role/dev_aws_iam_role
-              role-session-name: sample_role_session
-              aws-region: ${{ env.AWS_REGION }}
-          - name: Configure AWS credentials for TEST
-            uses: aws-actions/configure-aws-credentials@v3
-            with:
-              role-to-assume: arn:aws:iam::${{ secrets.TEST_AWS_ACCOUNT_ID }}:role/test_aws_iam_role
-              role-session-name: sample_role_session
-              aws-region: ${{ env.AWS_REGION }}
-          - name: Configure AWS credentials for PROD
-            uses: aws-actions/configure-aws-credentials@v3
-            with:
-              role-to-assume: arn:aws:iam::${{ secrets.PROD_AWS_ACCOUNT_ID }}:role/prod_aws_iam_role
-              role-session-name: sample_role_session
-              aws-region: ${{ env.AWS_REGION }}
 
 
 Developer Guide

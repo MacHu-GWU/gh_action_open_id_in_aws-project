@@ -1,7 +1,7 @@
 # User Settings
 gh_action_open_id_in_aws.egg-info/
 tmp/
-
+*.drawio.bkp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

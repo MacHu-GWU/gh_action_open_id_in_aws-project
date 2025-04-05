@@ -95,6 +95,22 @@ Below is example code to create the IAM Role for your GitHub Actions.
             reached status 🟢 CREATE_COMPLETE
           done
 
+.. note::
+
+   The created IAM role won't have any permission, you need to configure it yourself. Usually, GitHub action is used for CI/CD, you may need the following permissions to perform common CI/CD tasks.:
+
+    1. Manage (Create / Update / Delete) IAM Role / Policy
+    2. Manage (Create / Update / Delete) AWS CloudFormation stack.
+    3. Manage (Create / Update / Delete) AWS S3 Bucket to read / write deployment artifacts.
+    4. Manage (Create / Update / Delete) AWS Parameter Store to read and write parameters.
+    5. Manage (Create / Update / Delete) AWS ECR to push and pull container images and share it to workload AWS accounts.
+    6. Manage (Create / Update / Delete) AWS EC2 AMI and share it to workload AWS accounts.
+    7. Manage (Create / Update / Delete) AWS SNS Topic to send notifications.
+
+.. tip::
+
+    The GitHub IAM Role permission should define a common name prefix to identify devops resources from other resources, avoid using ``"Resource": "*"``.
+
 
 3. Test IAM Role in GitHub Actions Workflow Run
 ------------------------------------------------------------------------------

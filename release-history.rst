@@ -15,6 +15,19 @@ x.y.z (Backlog)
 **Miscellaneous**
 
 
+1.0.1 (205-04-05)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**💥Breaking Changes**
+
+- Rework the ``setup_github_action_open_id_connection_in_aws`` function and update the underlying AWS CloudFormation template.
+- Allow to fully control the ``github_repo_patterns``.
+- Allow to create OIDC provider only or IAM role only.
+
+**Miscellaneous**
+
+- Rework documentation.
+
+
 0.1.3 (2023-12-19)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Miscellaneous**

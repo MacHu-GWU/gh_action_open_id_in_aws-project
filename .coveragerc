@@ -8,6 +8,7 @@ omit =
     gh_action_open_id_in_aws/_version.py
     gh_action_open_id_in_aws/cli.py
     gh_action_open_id_in_aws/paths.py
+    gh_action_open_id_in_aws/cf.py
 
 [report]
 # Regexes for lines to exclude from consideration
