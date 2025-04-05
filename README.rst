@@ -51,7 +51,7 @@ Welcome to ``gh_action_open_id_in_aws`` Documentation
 
 To use GitHub Actions to deploy applications to AWS, we have to setup the permission properly.
 
-The old school method is to use `Secret Environment Variable <https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions>`_ to store the `AWS IAM User <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html>`_ credentials. You can store `access key abd secret key <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html>`_ to the `AWS_ACCESS_KEY_ID 和 AWS_SECRET_ACCESS_KEY <https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html>`_ environment variables. This is also the solution used by CircleCI.
+The old school method is to use `Secret Environment Variable <https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions>`_ to store the `AWS IAM User <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html>`_ credentials. You can store `access key abd secret key <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html>`_ to the `AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY <https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html>`_ environment variables. This is also the solution used by CircleCI.
 
 Around Nov 2021, AWS and GitHub made the official Open ID Connection (OIDC) available. It simplifies the process of granting AWS permissions to GitHub Actions. This is the AWS recommended way, and AWS explicitly mentioned that it is `NOT recommended to use long term IAM user credential for CI/CD <https://github.com/aws-actions/configure-aws-credentials#long-term-credentials-warning-10323>`_.
 
